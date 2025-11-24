@@ -36,12 +36,16 @@ export default function Header() {
   const notificationsCount = 2;
 
   const categories = [
-    { id: 'femme', name: 'Femme', slug: 'femme' },
-    { id: 'homme', name: 'Homme', slug: 'homme' },
+    { id: 'vetements-femmes', name: 'Vêtements Femmes', slug: 'vetements-femmes' },
+    { id: 'vetements-hommes', name: 'Vêtements Hommes', slug: 'vetements-hommes' },
+    { id: 'chaussures-femme', name: 'Chaussures Femme', slug: 'chaussures-femme' },
+    { id: 'chaussures-homme', name: 'Chaussures Homme', slug: 'chaussures-homme' },
     { id: 'enfant', name: 'Enfant', slug: 'enfant' },
     { id: 'maison', name: 'Maison', slug: 'maison' },
-    { id: 'beaute', name: 'Beauté', slug: 'beaute' },
-    { id: 'sport', name: 'Sport', slug: 'sport' },
+    { id: 'sacs-a-main', name: 'Sacs à Main', slug: 'sacs-a-main' },
+    { id: 'accessoires', name: 'Accessoires', slug: 'accessoires' },
+    { id: 'parfums', name: 'Parfums', slug: 'parfums' },
+    { id: 'autres', name: 'Autres', slug: 'autres' },
   ];
 
   useEffect(() => {
