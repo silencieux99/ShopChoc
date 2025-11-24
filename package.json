@@ -1,0 +1,29 @@
+{
+  "name": "shopchoc",
+  "version": "1.0.0",
+  "description": "Marketplace moderne P2P style Vinted",
+  "type": "module",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend && npm start",
+    "ip": "node get-ip.js"
+  },
+  "keywords": [
+    "marketplace",
+    "ecommerce",
+    "vinted",
+    "p2p",
+    "firebase",
+    "react",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
