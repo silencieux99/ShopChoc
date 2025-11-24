@@ -173,6 +173,14 @@ export default function Header() {
                 Promotions
               </Link>
             </li>
+            <li>
+              <Link
+                to="/admin"
+                className="text-purple-600 font-medium hover:text-purple-700"
+              >
+                🔧 Admin
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -242,6 +250,13 @@ export default function Header() {
                     {category.name}
                   </Link>
                 ))}
+                <Link
+                  to="/admin"
+                  className="block px-3 py-3 text-purple-600 font-medium hover:bg-purple-50 rounded-lg transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🔧 Admin
+                </Link>
               </div>
             </div>
             

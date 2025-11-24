@@ -17,6 +17,9 @@ export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  // Utilisateur par défaut si non connecté (pour démo)
+  const displayUser = user || { displayName: 'Admin', email: 'admin@shopchoc.com' };
+  
   // Auto-close sidebar on mobile
   useEffect(() => {
     const handleResize = () => {
