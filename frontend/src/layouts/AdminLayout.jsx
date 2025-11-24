@@ -5,7 +5,7 @@ import {
   BarChart3, Settings, LogOut, Menu, X, 
   Bell, Search, ChevronDown, Store, 
   FileText, Palette, Shield, CreditCard,
-  TrendingUp, AlertCircle, Calendar
+  TrendingUp, AlertCircle, Calendar, Download
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { cn } from '../shared/utils/cn';
@@ -67,6 +67,12 @@ export default function AdminLayout() {
       label: 'Clients',
       icon: Users,
       path: '/admin/customers',
+      badge: null
+    },
+    {
+      label: 'Scraper',
+      icon: Download,
+      path: '/admin/scraper',
       badge: null
     },
     {

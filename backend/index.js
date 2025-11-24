@@ -9,6 +9,7 @@ import rateLimit from 'express-rate-limit';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import scraperRoutes from './routes/scraperRoutes.js';
 
 // Configuration
 dotenv.config();
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/scraper', scraperRoutes);
 
 // Route de santé
 app.get('/api/health', (req, res) => {

@@ -1,0 +1,98 @@
+🤖 GUIDE D'UTILISATION DU SCRAPER FOURNISSEUR (FRONTEND ONLY)
+==============================================================
+
+✅ PAS DE BACKEND NÉCESSAIRE - Tout fonctionne dans le navigateur !
+
+🚀 UTILISATION VIA L'INTERFACE ADMIN
+------------------------------------
+1. Accéder à : https://shop-choc.vercel.app/admin/scraper
+
+2. Remplir le formulaire :
+   - URL du site fournisseur : https://exemple.com
+   - Nom d'utilisateur : votre_username
+   - Mot de passe : votre_password
+   - Multiplicateur de prix : 1.3 (= 30% de marge)
+
+3. Cliquer sur "Se connecter"
+
+4. Les catégories s'affichent automatiquement
+
+5. Pour chaque catégorie :
+   - "Test (5)" : Scrapper 5 produits pour tester
+   - "Scrapper" : Scrapper tous les produits de la catégorie
+
+6. Ou cliquer sur "Tout scrapper" pour tout importer
+
+📦 CE QUE FAIT LE SCRAPER
+-------------------------
+Pour chaque produit :
+✅ Récupère le titre
+✅ Récupère la description
+✅ Récupère le prix original
+✅ Calcule votre prix (prix × multiplicateur)
+✅ Télécharge 7-8 images
+✅ Upload les images sur Firebase Storage
+✅ Crée le produit dans Firestore
+
+⚙️ PERSONNALISATION
+-------------------
+Si la structure du site fournisseur est différente, modifier :
+frontend/src/services/scraperService.js
+
+Lignes à adapter :
+- getCategories() : Sélecteurs CSS pour les catégories
+- getAlbumsFromCategory() : Sélecteurs pour les produits
+- getImagesFromAlbum() : Sélecteurs pour les images
+- scrapeAndAddProduct() : Extraction titre/description/prix
+
+⚠️ LIMITATIONS CORS
+-------------------
+Le scraping fonctionne via un proxy CORS public (allorigins.win).
+Si le site fournisseur bloque CORS, vous devrez :
+1. Utiliser une extension navigateur pour désactiver CORS (développement uniquement)
+2. Ou demander au fournisseur d'autoriser votre domaine
+
+📊 EXEMPLE DE RÉSULTAT
+----------------------
+🔍 Scraping catégorie: Vêtements Femmes
+📦 15 produits à scrapper
+
+[1/15]
+📦 Scraping: https://fournisseur.com/produit-1
+📸 Upload de 8 images...
+✅ Image 1 uploadée
+✅ Image 2 uploadée
+...
+✅ Produit ajouté: abc123 - Robe été - 45.50€
+
+✅ Catégorie terminée: 15/15 produits ajoutés
+
+🔧 DÉPANNAGE
+------------
+Erreur d'authentification :
+→ Vérifier username/password
+→ Vérifier l'URL du site
+
+Aucune catégorie trouvée :
+→ Adapter les sélecteurs CSS dans getCategories()
+
+Aucune image trouvée :
+→ Adapter les sélecteurs CSS dans getImagesFromAlbum()
+
+Produits mal importés :
+→ Adapter les sélecteurs dans scrapeAndAddProduct()
+
+⚠️ IMPORTANT
+------------
+- Le scraping respecte un délai de 2s entre chaque produit
+- Un délai de 3s entre chaque catégorie
+- Cela évite de surcharger le serveur fournisseur
+- Le scraping peut prendre du temps (normal)
+
+💡 CONSEILS
+-----------
+1. Toujours tester avec 5 produits d'abord
+2. Vérifier que les prix sont corrects
+3. Vérifier que les images sont bien uploadées
+4. Puis lancer le scraping complet
+5. Le scraping complet peut tourner en arrière-plan

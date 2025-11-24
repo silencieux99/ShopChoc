@@ -1,0 +1,152 @@
+🔧 COMMENT ADAPTER LES SÉLECTEURS CSS POUR VOTRE FOURNISSEUR
+============================================================
+
+📍 ÉTAPE 1 : INSPECTER LE SITE FOURNISSEUR
+------------------------------------------
+1. Ouvrir le site fournisseur dans Chrome/Firefox
+2. Clic droit > Inspecter (F12)
+3. Utiliser l'outil de sélection (icône flèche en haut à gauche)
+4. Cliquer sur les éléments à scrapper
+
+🎯 ÉTAPE 2 : IDENTIFIER LES SÉLECTEURS
+--------------------------------------
+
+A) POUR LES CATÉGORIES :
+   - Chercher les liens vers les catégories
+   - Noter la classe CSS ou la structure HTML
+   
+   Exemples :
+   - <a class="category-link">Vêtements</a>
+     → Sélecteur : '.category-link'
+   
+   - <div class="cat-item"><a href="/cat/vetements">...</a></div>
+     → Sélecteur : '.cat-item a'
+   
+   - <li class="menu-item"><a>...</a></li>
+     → Sélecteur : '.menu-item a'
+
+B) POUR LES PRODUITS (ALBUMS) :
+   - Chercher les cartes/liens de produits
+   
+   Exemples :
+   - <div class="product-card">...</div>
+     → Sélecteur : '.product-card'
+   
+   - <article class="item">...</article>
+     → Sélecteur : '.item'
+   
+   - <a class="album-link">...</a>
+     → Sélecteur : '.album-link'
+
+C) POUR LES IMAGES :
+   - Chercher toutes les images du produit
+   
+   Exemples :
+   - <img class="product-image" src="...">
+     → Sélecteur : '.product-image'
+   
+   - <div class="gallery"><img src="..."></div>
+     → Sélecteur : '.gallery img'
+   
+   - <img data-src="..." class="lazy">
+     → Sélecteur : 'img[data-src]'
+
+D) POUR LE TITRE :
+   - Chercher le titre du produit
+   
+   Exemples :
+   - <h1 class="product-title">Nom du produit</h1>
+     → Sélecteur : '.product-title'
+   
+   - <h2 class="name">...</h2>
+     → Sélecteur : 'h2.name'
+
+E) POUR LE PRIX :
+   - Chercher l'élément contenant le prix
+   
+   Exemples :
+   - <span class="price">29.99€</span>
+     → Sélecteur : '.price'
+   
+   - <div class="product-price">29,99 €</div>
+     → Sélecteur : '.product-price'
+
+🛠️ ÉTAPE 3 : MODIFIER LE CODE
+------------------------------
+
+Ouvrir : frontend/src/services/scraperService.js
+
+1) Modifier getCategories() ligne ~60 :
+   
+   const categoryElements = doc.querySelectorAll('.category-item, .category');
+   
+   Remplacer par VOS sélecteurs :
+   const categoryElements = doc.querySelectorAll('.votre-classe-categorie');
+
+2) Modifier getAlbumsFromCategory() ligne ~90 :
+   
+   const albumElements = doc.querySelectorAll('.album-item, .product-item');
+   
+   Remplacer par VOS sélecteurs :
+   const albumElements = doc.querySelectorAll('.votre-classe-produit');
+
+3) Modifier getImagesFromAlbum() ligne ~130 :
+   
+   const imgElements = doc.querySelectorAll('.gallery img, img');
+   
+   Remplacer par VOS sélecteurs :
+   const imgElements = doc.querySelectorAll('.votre-classe-image');
+
+4) Modifier scrapeAndAddProduct() ligne ~180 :
+   
+   const title = doc.querySelector('h1, .product-title')?.textContent.trim();
+   const price = doc.querySelector('.price')?.textContent.trim();
+   
+   Remplacer par VOS sélecteurs :
+   const title = doc.querySelector('.votre-classe-titre')?.textContent.trim();
+   const price = doc.querySelector('.votre-classe-prix')?.textContent.trim();
+
+💡 ASTUCES
+----------
+1. Utilisez la console du navigateur pour tester :
+   document.querySelectorAll('.votre-selecteur')
+   
+2. Si plusieurs classes possibles, séparez par virgule :
+   '.class1, .class2, .class3'
+   
+3. Pour les attributs :
+   'img[src*="product"]' → images dont src contient "product"
+   'a[href*="/category/"]' → liens contenant "/category/"
+   
+4. Pour la hiérarchie :
+   '.parent .child' → enfant dans parent
+   '.parent > .child' → enfant direct
+   
+5. Testez toujours avec 5 produits d'abord !
+
+📞 EXEMPLE COMPLET
+------------------
+Si votre site a cette structure :
+
+<div class="shop-category">
+  <a href="/cat/vetements">Vêtements</a>
+</div>
+
+<div class="item-card">
+  <a href="/product/123">
+    <h3 class="item-name">Robe</h3>
+    <span class="item-price">45€</span>
+  </a>
+</div>
+
+<div class="product-gallery">
+  <img src="image1.jpg" class="prod-img">
+  <img src="image2.jpg" class="prod-img">
+</div>
+
+Alors modifiez :
+- getCategories() : '.shop-category a'
+- getAlbumsFromCategory() : '.item-card'
+- getImagesFromAlbum() : '.prod-img'
+- titre : '.item-name' ou 'h3.item-name'
+- prix : '.item-price'

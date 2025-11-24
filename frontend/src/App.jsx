@@ -10,6 +10,7 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
 const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
 const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'));
+const AdminScraper = lazy(() => import('./pages/admin/AdminScraper'));
 
 import Header from './shared/components/Header';
 import Footer from './shared/components/Footer';
@@ -167,6 +168,11 @@ function App() {
           <Route path="customers" element={
             <Suspense fallback={<PageLoader />}>
               <AdminCustomers />
+            </Suspense>
+          } />
+          <Route path="scraper" element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminScraper />
             </Suspense>
           } />
         </Route>
