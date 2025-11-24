@@ -80,12 +80,13 @@ export const productService = {
         q = query(q, where('isFeatured', '==', true));
       }
       
-      if (filters.status) {
+      if (filters.status && filters.status !== 'all') {
         q = query(q, where('status', '==', filters.status));
-      } else {
+      } else if (!filters.status) {
         // Par défaut, ne montrer que les articles disponibles
         q = query(q, where('status', '==', 'available'));
       }
+      // Si status === 'all', ne pas filtrer par status
       
       // Prix
       if (filters.minPrice) {

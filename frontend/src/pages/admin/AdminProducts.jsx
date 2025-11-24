@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Plus, Search, Filter, Download, Upload, 
   Edit, Trash2, Eye, MoreVertical, Image,
@@ -10,6 +10,8 @@ import Badge from '../../shared/ui/Badge';
 import Modal from '../../shared/ui/Modal';
 import Input from '../../shared/ui/Input';
 import { cn } from '../../shared/utils/cn';
+import { productService } from '../../services/productService';
+import toast from 'react-hot-toast';
 
 export default function AdminProducts() {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -21,9 +23,30 @@ export default function AdminProducts() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Products data - Empty initially
-  const products = [];
+  // Charger les produits depuis Firebase
+  useEffect(() => {
+    fetchProducts();
+  }, [filterCategory, sortBy]);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const result = await productService.getProducts({
+        category: filterCategory,
+        sort: sortBy,
+        status: 'all' // Récupérer tous les produits (pas seulement 'available')
+      });
+      setProducts(result.products || []);
+    } catch (error) {
+      console.error('Erreur lors du chargement des produits:', error);
+      toast.error('Erreur lors du chargement des produits');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = ['all', 'Femme', 'Homme', 'Enfant', 'Accessoires', 'Maison'];
 
@@ -261,7 +284,25 @@ export default function AdminProducts() {
       )}
 
       {/* Products Grid/List */}
-      {viewMode === 'grid' ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Chargement des produits...</p>
+          </div>
+        </div>
+      ) : products.length === 0 ? (
+        <Card>
+          <div className="text-center py-12">
+            <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucun produit</h3>
+            <p className="text-gray-600 mb-6">Commencez par ajouter votre premier produit</p>
+            <Button leftIcon={<Plus className="h-4 w-4" />} onClick={() => setShowAddModal(true)}>
+              Ajouter un produit
+            </Button>
+          </div>
+        </Card>
+      ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {products.map(product => (
             <Card key={product.id} padding={false} className="overflow-hidden">
@@ -285,14 +326,14 @@ export default function AdminProducts() {
 
                 {/* Image */}
                 <img 
-                  src={product.image}
-                  alt={product.name}
+                  src={product.images?.[0] || '/placeholder.png'}
+                  alt={product.title}
                   className="w-full h-48 object-cover"
                 />
                 
                 {/* Status Badge */}
                 <div className="absolute bottom-2 right-2">
-                  {getStatusBadge(product.status, product.stock)}
+                  {getStatusBadge(product.status, 0)}
                 </div>
               </div>
               
@@ -300,9 +341,9 @@ export default function AdminProducts() {
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <h3 className="font-semibold text-gray-900 line-clamp-1">
-                      {product.name}
+                      {product.title}
                     </h3>
-                    <p className="text-xs text-gray-500">{product.sku}</p>
+                    <p className="text-xs text-gray-500">{product.category}</p>
                   </div>
                 </div>
                 
@@ -315,10 +356,10 @@ export default function AdminProducts() {
 
                 <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
                   <div>
-                    <span className="text-gray-500">Stock:</span> {product.stock}
+                    <span className="text-gray-500">Vues:</span> {product.views || 0}
                   </div>
                   <div>
-                    <span className="text-gray-500">Ventes:</span> {product.sales}
+                    <span className="text-gray-500">Likes:</span> {product.likes?.length || 0}
                   </div>
                 </div>
 
